@@ -1,38 +1,43 @@
-import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import { Image, ImageBackground, ScrollView, Text, TouchableOpacity, TouchableWithoutFeedback, View } from "react-native";
-import { useSelector } from "react-redux";
+import Home from "@/components/Home";
+import Snake from "@/components/Snake";
+import {  useState } from "react";
+import {
+ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import tw from "twrnc";
 
 export default function Index() {
-  const list = useSelector((state) => state.list);
-  const [showList, setShowList] = useState([]);
+ 
+  const [page,setPage] = useState('')
 
-  useEffect(() => {
-    setShowList(list);
-  }, [list]);
+  const getPage = () => {
+    switch (page) {
+      case "snake":
+        
+        return <Snake/>;
+    
+      default:
+        return<Home/>;
+    }
+  }
+
+  
 
   return (
-    <View style={tw``}>
-      <View style={tw` h-8`}></View>
-      <ScrollView>
-        <View style={tw`flex-row pb-15 bg-black pt-3 flex-wrap gap-2 items-center justify-center`}>
-        {showList.map((item) => {
-          return (
-            <TouchableOpacity key={item.Id} onPress={()=>router.push(`/detail/${item.Id}`)} style={tw``}>
-             
-              <ImageBackground
-                source={item.img}
-                resizeMode="cover"
-                style={tw`w-40 h-40 p-2`}
-              >
-                <Text style={tw`text-white top-25 bg-black rounded text-center p-1`}>{item.MMName}</Text>
-              </ImageBackground>
-            </TouchableOpacity>
-          );
-        })}
-        </View>
-       
+    <View style={tw`bg-black`}>
+      <View style={tw`flex-row items-center`}>
+        <TouchableOpacity onPress={()=>setPage('')} style={tw`flex-1 text-center`}>
+          <Text style={tw`text-center text-white p-3 ${page === ''?"border-b-2 border-blue-400 ":""}`}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={()=>setPage('snake')} style={tw`flex-1 text-center`}>
+          <Text style={tw`text-center text-white p-3 ${page === 'snake'?"border-b-2 border-blue-400 ":""}`}>Snake</Text>
+        </TouchableOpacity>
+      </View>
+      <ScrollView contentContainerStyle={tw` bg-black`}>
+       {getPage()}
       </ScrollView>
     </View>
   );
